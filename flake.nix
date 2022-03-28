@@ -25,9 +25,7 @@
   inputs.flake-utils.url = github:numtide/flake-utils;
 
   outputs = { self, nixpkgs, flake-utils, ... }: {
-    forDocs = { targets ? {},
-                fonts ? (pkgs: []),
-                extraBuildInputs ? (pkgs: [])}: system:
+    buildPandocEnv = { system, fonts ? (pkgs: []), extraBuildInputs ? (pkgs: []) }:
       let pkgs = import nixpkgs { inherit system; };
           texlive-combined = with pkgs; [(texlive.combine {
             inherit (texlive) scheme-medium collection-latexextra;
@@ -40,10 +38,11 @@
           ]) ++ (extraBuildInputs pkgs);
           selectedFonts = fonts pkgs;
       in {
-        devShell = pkgs.mkShell {
+        shell = pkgs.mkShell {
           inherit buildInputs;
+          OSFONTDIR = builtins.concatStringsSep ":" selectedFonts;
         };
-        packages = builtins.mapAttrs (name: {target, files, path}: pkgs.stdenvNoCC.mkDerivation {
+        mkDoc = {name, target, files, path}: pkgs.stdenvNoCC.mkDerivation {
           inherit name;
           inherit buildInputs;
           src = builtins.path { inherit path; inherit name; };
@@ -54,7 +53,21 @@
             mkdir -p $out
             cp -r ${builtins.concatStringsSep " " files} $out
           '';
-        }) targets;
+        };
+
       };
+    forDocs = { targets ? {},
+                fonts ? (pkgs: []),
+                extraBuildInputs ? (pkgs: [])}: system:
+                  let env = self.buildPandocEnv { inherit system fonts extraBuildInputs; };
+                  in {
+                    devShell = env.shell;
+                    packages = builtins.mapAttrs (name: params: env.mkDoc (params // {inherit name;})) targets;
+                  };
+    checks = flake-utils.lib.eachDefaultSystem (system: self.forDocs {
+      targets = [
+        { target = "simple.pdf"; files = ["simple.pdf"]; path = ./tests/simple/.; }
+      ];
+    });
   };
 }
