@@ -32,7 +32,7 @@
           plexEnv = self.lib.buildPandocEnv { inherit system; fonts = pkgs: [ pkgs.ibm-plex ]; };
       in {
         checks.simple = env.mkDoc { name = "simple"; target = "simple.pdf"; files = ["simple.pdf"]; path = ./tests/simple/.; };
-        checks.plex = env.mkDoc { name = "custom-font"; target = "custom-font.pdf"; files = ["custom-font.pdf"]; path = ./tests/custom-font/.; };
+        checks.plex = plexEnv.mkDoc { name = "custom-font"; target = "custom-font.pdf"; files = ["custom-font.pdf"]; path = ./tests/custom-font/.; };
       }
     );
 }
