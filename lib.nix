@@ -1,4 +1,4 @@
-{ nixpkgs }: {
+{ nixpkgs }: rec {
     buildPandocEnv = { system, fonts ? (pkgs: []), extraBuildInputs ? (pkgs: []) }:
       let pkgs = import nixpkgs { inherit system; };
           texlive-combined = with pkgs; [(texlive.combine {
@@ -33,7 +33,7 @@
     forDocs = { targets ? {},
                 fonts ? (pkgs: []),
                 extraBuildInputs ? (pkgs: [])}: system:
-                  let env = self.buildPandocEnv { inherit system fonts extraBuildInputs; };
+                  let env = buildPandocEnv { inherit system fonts extraBuildInputs; };
                   in {
                     devShell = env.shell;
                     packages = builtins.mapAttrs (name: params: env.mkDoc (params // {inherit name;})) targets;
