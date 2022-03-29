@@ -1,0 +1,34 @@
+#+TITLE: Pandoc and LaTeX builder for Nix
+* Introduction
+This flakes provides a few helper functions to build documents using pandoc and LaTeX.
+* Functions
+The flake provides two functions under its =lib=-attribute
+
+** =buildPandocEnv=
+#+begin_src nix
+lib.buildPandocEnv {
+  system, # System in which to build
+    fonts ? (pkgs: []), # pkgs -> [derivation] that selects fonts from nixpkgs
+    extraBuildInputs ? (pkgs: []) } # pkgs -> [derivation] extra build inputs
+#+end_src
+
+*** Arguments
+1. The =system= attribute determines on which system the documents are built.
+2. =fonts= is a function that selects from font packages from nixpkgs. These are then made available to LuaLaTeX.
+3. =extraBuildInputs= can be used to select extra dependencies for building documents
+
+*** Result
+This function reduces to an attribute set of two functions
+
+- =shell= is a development shell environment
+- =mkDoc= a function to create a derivation
+  #+begin_src nix
+  mkDoc = {name, # name of the derivation
+            target, # makefile target
+            files, # resulting files to be copied into store
+            path} # path to source and Makefile
+  #+end_src
+
+
+** =forDocs=
+Is a convenience function to generate the =output=-attribute for a complete flake.
