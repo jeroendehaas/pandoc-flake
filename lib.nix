@@ -10,17 +10,35 @@
             haskellPackages.pandoc-crossref
           ]) ++ (extraBuildInputs pkgs);
           selectedFonts = fonts pkgs;
+          OSFONTDIR=builtins.concatStringsSep ":" selectedFonts;
+          mkDerivation = attrs: pkgs.stdenvNoCC.mkDerivation (attrs // {
+            inherit buildInputs
+              OSFONTDIR;
+          });
+          cache = mkDerivation {
+            name = "luaotfload-cache";
+            TEXMFHOME=".cache";
+            TEXMFVAR=".cache/texmf-var";
+            unpackPhase = "true";
+            buildPhase = ''
+              luaotfload-tool --update
+            '';
+            installPhase = ''
+              cp -r .cache $out
+            '';
+          };
       in {
         shell = pkgs.mkShell {
           inherit buildInputs;
           OSFONTDIR = builtins.concatStringsSep ":" selectedFonts;
         };
-        mkDoc = {name, target, files, path}: pkgs.stdenvNoCC.mkDerivation {
+        mkDoc = {name, target, files, path}: mkDerivation {
           inherit name;
-          inherit buildInputs;
           src = builtins.path { inherit path; inherit name; };
+          TEXMFHOME="${cache}";
+          TEXMFVAR="${cache}/texmf-var";
           buildPhase = ''
-            env OSFONTDIR=${builtins.concatStringsSep ":" selectedFonts} TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var make ${target}
+            make ${target}
           '';
           installPhase = ''
             mkdir -p $out
