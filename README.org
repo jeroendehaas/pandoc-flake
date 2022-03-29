@@ -1,5 +1,5 @@
 #+TITLE: Pandoc and LaTeX builder for Nix
-[[https://github.com/jeroendehaas/pandoc-flake/actions/workflows/check.Yml/badge.svg]]
+[[https://github.com/jeroendehaas/pandoc-flake/actions/workflows/check.yml/badge.svg]]
 * Introduction
 This flakes provides a few helper functions to build documents using pandoc and LaTeX.
 * Functions
