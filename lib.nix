@@ -9,34 +9,37 @@
             pandoc
             haskellPackages.pandoc-crossref
           ]) ++ (extraBuildInputs pkgs);
-          selectedFonts = fonts pkgs;
-          OSFONTDIR=builtins.concatStringsSep ":" selectedFonts;
+          # Separating paths by colons or semicolons
+          # did not work. This creates a single directory
+          # from all font packages
+          OSFONTDIR = pkgs.symlinkJoin {
+            name = "combined-fonts";
+            paths = fonts pkgs;
+          };
           mkDerivation = attrs: pkgs.stdenvNoCC.mkDerivation (attrs // {
             inherit buildInputs
               OSFONTDIR;
-          });
-          cache = mkDerivation {
-            name = "luaotfload-cache";
             TEXMFHOME=".cache";
             TEXMFVAR=".cache/texmf-var";
-            unpackPhase = "true";
-            buildPhase = ''
-              luaotfload-tool --update
-            '';
-            installPhase = ''
-              cp -r .cache $out
-            '';
-          };
+          });
+          # Sharing cache does not work yet
+          #cache = mkDerivation {
+          #  name = "luaotfload-cache";
+          #  unpackPhase = "true";
+          #  buildPhase = ''
+          #    luaotfload-tool --update
+          #  '';
+          #  installPhase = ''
+          #    cp -r .cache $out
+          #  '';
+          #};
       in {
         shell = pkgs.mkShell {
-          inherit buildInputs;
-          OSFONTDIR = builtins.concatStringsSep ":" selectedFonts;
+          inherit buildInputs OSFONTDIR;
         };
         mkDoc = {name, target, files, path}: mkDerivation {
           inherit name;
           src = builtins.path { inherit path; inherit name; };
-          TEXMFHOME="${cache}";
-          TEXMFVAR="${cache}/texmf-var";
           buildPhase = ''
             make ${target}
           '';
