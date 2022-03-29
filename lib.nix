@@ -6,7 +6,6 @@
           })];
           buildInputs = (with pkgs; [
             texlive-combined
-            gnumake
             pandoc
             haskellPackages.pandoc-crossref
           ]) ++ (extraBuildInputs pkgs);
