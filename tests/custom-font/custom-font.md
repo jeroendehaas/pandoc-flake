@@ -1,7 +1,7 @@
 ---
 mainfont: IBM Plex Sans
 monofont: IBM Plex Mono
-___
+---
 # Custom font
 
 Lorem ipsum semper habeo duo, ut vis. Aliquyam eu splendide. Ut mei eteu nec antiopam corpora. Kasd pretium cetero qui arcu. Assentior ei his usu invidunt kasd justo justo. Semper Ne eleifend Per ut Eam graeci tincidunt. Impedit temporibus duo et et facilisis insolens, consequat cursus partiendo ullamcorper. Vulputate facilisi Donec Aliquam labore inimicus voluptua. Penatibus sea Vel amet. His ius audire In mea Repudiandae nullam sed assentior. Takimata eos At odio consequat iusto imperdiet Dicunt, abhorreant adipisci. Officiis rhoncus leo dicta vitae, clita elementum mauris definiebas. Consetetur te inimicus nec mus. Lorem Usu Duo Aenean corrumpit aliquyam est eum. Ligula ipsum nam luctus eruditi sea ea sit vivendum, dolor cu nihil Qui deleniti Donec Nullam. Takimata Maecenas consetetur incorrupte Aenean eirmod senserit eos. Amet, ocurreret et pro atomorum et rebum. Pro quis ut nec meis brute nunc. 
