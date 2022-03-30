@@ -10,13 +10,15 @@ The flake provides two functions under its =lib=-attribute
 lib.buildPandocEnv {
   system, # System in which to build
     fonts ? (pkgs: []), # pkgs -> [derivation] that selects fonts from nixpkgs
-    extraBuildInputs ? (pkgs: []) } # pkgs -> [derivation] extra build inputs
+    extraBuildInputs ? (pkgs: [] # pkgs -> [derivation] extra build inputs
+    extraTexlivePackages ? (pkgs: [])}: # pkgs -> [derivation] select extra texlive packages
 #+end_src
 
 *** Arguments
 1. The =system= attribute determines on which system the documents are built.
 2. =fonts= is a function that selects from font packages from nixpkgs. These are then made available to LuaLaTeX.
 3. =extraBuildInputs= can be used to select extra dependencies for building documents
+3. =extraTexlivePackages= can be used to select extra packages to combine into the texlive set
 
 *** Result
 This function reduces to an attribute set of two functions
