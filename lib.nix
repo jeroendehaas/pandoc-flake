@@ -35,7 +35,7 @@
           #  '';
           #};
       in {
-        shell = let root = builtins.toString ./.; in pkgs.mkShell {
+        shell = let root = builtins.getEnv "PWD"; in pkgs.mkShell {
           inherit buildInputs OSFONTDIR;
           TEXMFHOME="${root}/.cache";
           TEXMFVAR="${root}/.cache/texmf-var";
