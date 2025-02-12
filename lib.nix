@@ -37,6 +37,8 @@
       in {
         shell = pkgs.mkShell {
           inherit buildInputs OSFONTDIR;
+          TEXMFHOME=".cache";
+          TEXMFVAR=".cache/texmf-var";
         };
         mkDoc = {name, target, files, path}: mkDerivation {
           inherit name;
