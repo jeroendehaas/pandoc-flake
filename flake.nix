@@ -22,7 +22,7 @@
 {
   description = "A template for building documents using Pandoc";
 
-  inputs.flake-utils.url = github:numtide/flake-utils;
+  inputs.flake-utils.url = "github:numtide/flake-utils";
 
   outputs = { self, nixpkgs, flake-utils, ... }: {
     lib = import ./lib.nix { inherit nixpkgs; };
