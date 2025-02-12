@@ -35,10 +35,10 @@
           #  '';
           #};
       in {
-        shell = pkgs.mkShell {
+        shell = let root = builtins.toString ./.; in pkgs.mkShell {
           inherit buildInputs OSFONTDIR;
-          TEXMFHOME="$PWD/.cache";
-          TEXMFVAR="$PWD/.cache/texmf-var";
+          TEXMFHOME="${root}/.cache";
+          TEXMFVAR="${root}/.cache/texmf-var";
         };
         mkDoc = {name, target, files, path}: mkDerivation {
           inherit name;
